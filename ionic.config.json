@@ -1,7 +1,8 @@
 {
   "name": "Sensores",
   "integrations": {
-    "capacitor": {}
+    "capacitor": {},
+    "cordova": {}
   },
   "type": "angular"
 }
