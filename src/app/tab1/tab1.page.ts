@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { Dialogs } from '@ionic-native/dialogs/ngx';
 import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner/ngx';
-import { Platform } from '@ionic/angular';
+import { Platform, AlertController } from '@ionic/angular';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
+import { alertController } from '@ionic/core';
 
 @Component({
   selector: 'app-tab1',
@@ -18,9 +19,10 @@ public screenOrientation : ScreenOrientation;
 
 
   constructor(private qrScanner: QRScanner, private dialogs: Dialogs, public platform: Platform,
-    screenOrientation: ScreenOrientation) {
+    screenOrientation: ScreenOrientation, public alertController: AlertController) {
     this.platform.backButton.subscribeWithPriority(0, ()=>{
 
+      
       this.corpoPagina.style.opacity = "1";
       this.img.style.opacity = "1";
 
@@ -31,6 +33,20 @@ public screenOrientation : ScreenOrientation;
 
     });
   }
+
+  /*alert*/
+  async presentAlert(text:string){
+    const alert = await this.alertController.create({
+      header: 'QRScanner',
+      subHeader: 'Resultado obtido: ',
+      message: `<textarea>${text}</textarea>`,
+      buttons: [{
+        text: 'OK'
+      }]
+    })
+    
+      alert.present();
+    }
 
   public initializeApp(){
     this.platform.ready().then(() => { 
@@ -57,7 +73,7 @@ public screenOrientation : ScreenOrientation;
        this.scanner = this.qrScanner.scan().subscribe((text: string) => {
          console.log('Scanned something', text);
 
-         this.dialogs.alert('Resultado da leitura ' + text);
+         this.presentAlert(text);
 
          this.corpoPagina.style.opacity = "1";
          this.img.style.opacity = "1";
