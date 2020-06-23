@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Dialogs } from '@ionic-native/dialogs/ngx';
 import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner/ngx';
 import { Platform } from '@ionic/angular';
+import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 
 @Component({
   selector: 'app-tab1',
@@ -12,10 +13,12 @@ export class Tab1Page {
 
 public corpoPagina: HTMLElement;
 public img: HTMLElement;
-
 public scanner : any;
+public screenOrientation : ScreenOrientation;
 
-  constructor(private qrScanner: QRScanner, private dialogs: Dialogs, public platform: Platform) {
+
+  constructor(private qrScanner: QRScanner, private dialogs: Dialogs, public platform: Platform,
+    screenOrientation: ScreenOrientation) {
     this.platform.backButton.subscribeWithPriority(0, ()=>{
 
       this.corpoPagina.style.opacity = "1";
@@ -24,7 +27,17 @@ public scanner : any;
       this.qrScanner.hide();
       this.scanner.unsubscribe(); //stop scanner
 
+      this.initializeApp();
+
     });
+  }
+
+  public initializeApp(){
+    this.platform.ready().then(() => { 
+      this.screenOrientation.lock
+      (this.screenOrientation.ORIENTATIONS.LANDSCAPE);
+    });
+
   }
 
   public lerQrCode(){
@@ -64,5 +77,5 @@ public scanner : any;
   .catch((e: any) => console.log('Error is', e));
 
   }
-
+  
 }
