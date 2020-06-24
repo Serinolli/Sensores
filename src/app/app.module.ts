@@ -12,17 +12,27 @@ import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner/ngx';
 import { Dialogs } from '@ionic-native/dialogs/ngx';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 
+import { IonicStorageModule } from '@ionic/storage';
+import { HistoricoService } from './services/historico.service'
+
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule],
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule,
+    IonicStorageModule.forRoot
+    ({
+      name: '__mydb', driverOrder: ['indexeddb', 'sqlite', 'websql']
+    }),
+],
   providers: [
     StatusBar,
     SplashScreen,
     QRScanner,
     Dialogs,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    ScreenOrientation
+    ScreenOrientation,
+    HistoricoService
   ],
   bootstrap: [AppComponent]
 })
