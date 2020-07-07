@@ -13,17 +13,24 @@ import { Dialogs } from '@ionic-native/dialogs/ngx';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 
 import { IonicStorageModule } from '@ionic/storage';
-import { HistoricoService } from './services/historico.service'
+
+import {AngularFireModule } from '@angular/fire';
+import {AngularFireDatabaseModule } from '@angular/fire/database';
+import {AngularFirestoreModule } from '@angular/fire/firestore';
+
+import { environment } from 'src/environments/environment';
+
 
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule,
-    IonicStorageModule.forRoot
-    ({
-      name: '__mydb', driverOrder: ['indexeddb', 'sqlite', 'websql']
-    }),
+  imports: [BrowserModule, 
+    IonicModule.forRoot(), 
+    AppRoutingModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFireDatabaseModule,
+    AngularFirestoreModule  
 ],
   providers: [
     StatusBar,
@@ -31,8 +38,7 @@ import { HistoricoService } from './services/historico.service'
     QRScanner,
     Dialogs,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    ScreenOrientation,
-    HistoricoService
+    ScreenOrientation
   ],
   bootstrap: [AppComponent]
 })

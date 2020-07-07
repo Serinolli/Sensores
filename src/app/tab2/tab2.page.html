@@ -5,7 +5,6 @@
     </ion-title>
   </ion-toolbar>
 </ion-header>
-<!--Socorro-->
 <ion-content [fullscreen]="true" color="medium">
   <ion-header collapse="condense">
     <ion-toolbar>
@@ -13,7 +12,28 @@
     </ion-toolbar>
   </ion-header>
 
-<ion-card *ngFor="let historico of Historicos">{{resultado}}</ion-card>
+<ion-item-sliding *ngFor="let historico of historicos">
+
+  <ion-item lines="full">
+    <ion-label>
+    <div>
+      <p position="stacked">
+        <ion-icon name="time-outline"></ion-icon> {{historico.datahora}}
+      </p>
+      <p>
+        <ion-icon name="qr-code-outline" class="ion-icon-qr"></ion-icon> {{historico.leitura}}
+      </p>
+      
+    </div>
+  </ion-label>
+  </ion-item>
+
+    <ion-item-options side="end">
+      <ion-item-option color="danger">
+        <ion-icon slot="icon-only" name="trash"></ion-icon>
+      </ion-item-option>
+    </ion-item-options>
+</ion-item-sliding>
 
   <app-explore-container name="Tab 2 page"></app-explore-container>
 </ion-content>

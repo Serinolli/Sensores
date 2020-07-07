@@ -6,7 +6,6 @@ import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 import { alertController } from '@ionic/core';
 import { Storage } from '@ionic/storage';
 import { Historico } from '../models/Historico';
-import { HistoricoService } from '../services/historico.service';
 import { Router } from '@angular/router';
 
 
@@ -30,7 +29,6 @@ public resultado: Historico;
     public platform: Platform, 
     screenOrientation: ScreenOrientation, 
     public alertController: AlertController, 
-    public historicoService: HistoricoService,
     public storage: Storage, 
     public router:Router
     
@@ -90,8 +88,7 @@ public resultado: Historico;
 
          console.log('Scanned something', text);
 
-         this.presentAlert(text);
-         this.salvar(this.resultado);         
+         this.presentAlert(text);         
         
          this.corpoPagina.style.opacity = "1";
          this.img.style.opacity = "1";
@@ -110,46 +107,8 @@ public resultado: Historico;
   })
   .catch((e: any) => console.log('Error is', e));
 
-  }
   
-  public async salvar(historico: Historico) {
-    if (historico.resultado){
-    await this.storage.set(historico.resultado, historico);
-    return true;
-  } else {
-    return false;
-      }
-    }
   
-    public async busca(resultado){
-      let historico: Historico;
-      await this.storage.get(resultado).then(valor=> {
-        historico = valor;
-      });
-      return historico;
-    }
-  
-    public async buscarTodos(){
-      let historicos = [];
-      return await this.storage.forEach((valor, chave, i) => {
-        historicos.push(valor);
-      }).then(() => {
-        return historicos;
-      }).catch(() => {
-        historicos = [];
-      });
-    }
-  
-    public async excluir(resultado) {
-      return await this.storage.remove(resultado);
-    }
-    
-    
-
-
-    
   }
 
-
-
-
+}

@@ -1,11 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { HistoricoService } from '../services/historico.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Storage } from '@ionic/storage';
 import { Historico } from '../models/Historico';
-
-
 
 
 @Component({
@@ -13,7 +10,18 @@ import { Historico } from '../models/Historico';
   templateUrl: 'tab2.page.html',
   styleUrls: ['tab2.page.scss']
 })
+
 export class Tab2Page {
 
-  constructor(router: Router, historicoService: HistoricoService) {}
+  public historicos: Historico[] = [
+    {datahora: "25/06/2020 18:53", leitura: "Leitura 1"},
+    {datahora: "26/06/2020 19:53", leitura: "Leitura 2"},
+    {datahora: "25/06/2020 20:53", leitura: "Leitura 3"},
+    {datahora: "25/06/2020 21:53", leitura: "Leitura 4"},
+    {datahora: "26/06/2020 12:32", leitura: "Leitura 5"},
+    {datahora: "25/06/2020 13:21", leitura: "Leitura 6"},
+
+  ];
+
+  constructor(router: Router) {}
 }
