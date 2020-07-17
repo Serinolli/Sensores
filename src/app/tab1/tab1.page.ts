@@ -7,6 +7,7 @@ import { alertController } from '@ionic/core';
 import { Storage } from '@ionic/storage';
 import { Historico } from '../models/Historico';
 import { Router } from '@angular/router';
+import { HistoricoService } from '../servicos/historico.service';
 
 
 @Component({
@@ -21,6 +22,7 @@ public img: HTMLElement;
 public scanner : any;
 public screenOrientation : ScreenOrientation;
 public resultado: Historico;
+public leitura: string;
 
 
   constructor(
@@ -30,7 +32,8 @@ public resultado: Historico;
     screenOrientation: ScreenOrientation, 
     public alertController: AlertController, 
     public storage: Storage, 
-    public router:Router
+    public router:Router,
+    private historicoService:HistoricoService
     
     ) {
     this.platform.backButton.subscribeWithPriority(0, ()=>{
@@ -49,11 +52,11 @@ public resultado: Historico;
 
   
   /*alert*/
-  async presentAlert(text:string){
+  async presentAlert(titulo:string, mensagem: string){
     const alert = await this.alertController.create({
       header: 'QRScanner',
       subHeader: 'Resultado obtido: ',
-      message: `<textarea>${text}</textarea>`,
+      message: `<textarea>${Text}</textarea>`,
       buttons: [{
         text: 'OK'
       }]
@@ -70,7 +73,7 @@ public resultado: Historico;
 
   }
 
-  public lerQrCode(){
+  public async lerQrCode(){
     this.qrScanner.prepare()
   .then((status: QRScannerStatus) => {
      if (status.authorized) {
@@ -84,17 +87,31 @@ public resultado: Historico;
           this.img.style.opacity = "0"
 
        // start scanning
-       this.scanner = this.qrScanner.scan().subscribe((text: string) => {
+       this.scanner = this.qrScanner.scan().subscribe(async(text: string) => {
+
+        this.leitura = (text['result']) ? text['result'] : text;
 
          console.log('Scanned something', text);
 
-         this.presentAlert(text);         
+         this.presentAlert(text, 'text');         
         
          this.corpoPagina.style.opacity = "1";
          this.img.style.opacity = "1";
 
          this.qrScanner.hide(); // hide camera preview
          this.scanner.unsubscribe(); // stop scanning
+      
+         const historico = new Historico();
+         historico.leitura = this.leitura;
+         historico.datahora = new Date();
+
+         await this.historicoService.create(historico).then(resposta => {
+           console.log(resposta);
+         }).catch(erro => {
+           this.presentAlert('ERRO: ', 'Erro em tentar salvar no firebase');
+           console.log('ERRO: ', erro);
+         });
+
        });
 
      } else if (status.denied) {

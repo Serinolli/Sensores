@@ -6,34 +6,36 @@
   </ion-toolbar>
 </ion-header>
 <ion-content [fullscreen]="true" color="medium">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Histórico</ion-title>
-    </ion-toolbar>
-  </ion-header>
 
-<ion-item-sliding *ngFor="let historico of historicos">
+  <ion-item-sliding *ngFor="let historico of listaHistoricos">
 
-  <ion-item lines="full">
-    <ion-label>
-    <div>
-      <p position="stacked">
-        <ion-icon name="time-outline"></ion-icon> {{historico.datahora}}
-      </p>
-      <p>
-        <ion-icon name="qr-code-outline" class="ion-icon-qr"></ion-icon> {{historico.leitura}}
-      </p>
-      
-    </div>
-  </ion-label>
+    <ion-item lines="full">
+      <div slot="start">
+<br>
+<br>
+        <ion-icon color="success" name="qr-code"></ion-icon>
+      </div>
+
+      <ion-label>
+        <div>
+          <p class="ion-text-right line">
+            {{historico.dataHora | date: 'short : '' : 'pt'}}
+          </p>
+          <p class="resultado">
+            {{historico.leitura}}  
+          </p>
+        </div>
+      </ion-label>
+      <div slot="end">
+        <ion-icon color="primary" name="calendar"></ion-icon>
+      </div>
   </ion-item>
 
     <ion-item-options side="end">
-      <ion-item-option color="danger">
+      <ion-item-option color="danger" (click)="deletar(historico.$key)">
         <ion-icon slot="icon-only" name="trash"></ion-icon>
       </ion-item-option>
     </ion-item-options>
-</ion-item-sliding>
-
-  <app-explore-container name="Tab 2 page"></app-explore-container>
+  </ion-item-sliding>
+  
 </ion-content>

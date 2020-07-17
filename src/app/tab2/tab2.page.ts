@@ -3,7 +3,10 @@ import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Storage } from '@ionic/storage';
 import { Historico } from '../models/Historico';
+import { HistoricoService } from '../servicos/historico.service';
 
+import localePtBr from '@angular/common/locales/pt';
+import {registerLocaleData} from '@angular/common';
 
 @Component({
   selector: 'app-tab2',
@@ -13,15 +16,34 @@ import { Historico } from '../models/Historico';
 
 export class Tab2Page {
 
-  public historicos: Historico[] = [
-    {datahora: "25/06/2020 18:53", leitura: "Leitura 1"},
-    {datahora: "26/06/2020 19:53", leitura: "Leitura 2"},
-    {datahora: "25/06/2020 20:53", leitura: "Leitura 3"},
-    {datahora: "25/06/2020 21:53", leitura: "Leitura 4"},
-    {datahora: "26/06/2020 12:32", leitura: "Leitura 5"},
-    {datahora: "25/06/2020 13:21", leitura: "Leitura 6"},
+  public listaHistoricos : Historico [] = [];
+  
+  constructor(router: Router, private historicoService: HistoricoService) {
+    registerLocaleData(localePtBr);
+  }
 
-  ];
+  public buscarHistoricos(){
+    this.listaHistoricos = [];
 
-  constructor(router: Router) {}
+    this.historicoService.getAll().subscribe(dados => {
+      this.listaHistoricos = dados.map(registro => {
+        return{
+          $key: registro.payload.doc.id,
+          leitura: registro.payload.doc.data()['leitura'],
+          dataHora: new Date(registro.payload.doc.data()['dataHora']['seconds'] * 1000)
+        } as unknown as Historico; 
+      });
+    })
+  }
+
+  async ionViewWillEnter(){
+    await this.buscarHistoricos();
+  }
+
+  public deletar(key: string){
+this.historicoService.delete(key);
+this.buscarHistoricos();
+  }
+
 }
+
